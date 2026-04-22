@@ -189,6 +189,9 @@ class DbtProducerWatcherOperator(DbtBuildMixin, DbtLocalBaseOperator):
         super().__init__(task_id=task_id, *args, **kwargs)
         self.log_format = "json"
 
+        if self.depends_on_past:
+            self.wait_for_downstream = True
+
         # Mutable dict populated lazily from the manifest; shared with the log parser.
         self._dataset_namespace: str | None = None
         self._model_outlet_uris: dict[str, list[str]] = {}

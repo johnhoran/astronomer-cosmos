@@ -370,6 +370,8 @@ class BaseConsumerSensor(BaseSensorOperator):  # type: ignore[misc]
         self.producer_task_id = producer_task_id
         self.deferrable = deferrable
         self.model_unique_id = extra_context.get("dbt_node_config", {}).get("unique_id")
+        if self.depends_on_past:
+            self.wait_for_downstream = True
 
     @property
     def is_test_sensor(self) -> bool:
